@@ -71,7 +71,7 @@ def cadastrar_produto():
             valor_perdido = (valor - valor_promocional) * quantidade
         
         # Calcular o valor total
-        valor_total = valor * quantidade - valor_perdido
+        valor_total = valor * quantidade
         
         # Armazenar os dados para salvar
         dados_estoque = {
@@ -93,7 +93,7 @@ def cadastrar_produto():
         if st.button("Salvar Cadastro"):
             salvar_estoque(dados_estoque)
             st.success("Produto cadastrado com sucesso!")
-    
+
 # Tela inicial com botões
 st.title("Controle de Validade dos Produtos")
 
@@ -101,9 +101,20 @@ col1, col2 = st.columns(2)
 
 with col1:
     if st.button("Consultar Produtos"):
-        # Mostrar produtos cadastrados
+        # Mostrar produtos cadastrados de forma mais bonita
         estoque_df = carregar_estoque()
-        st.dataframe(estoque_df)
+        
+        # Ajustando a formatação
+        st.write("### Produtos Cadastrados")
+        st.write("Abaixo estão os produtos e suas informações de validade.")
+
+        # Exibindo o dataframe de forma mais amigável
+        st.dataframe(estoque_df.style.format({
+            "Valor": "R$ {:,.2f}",
+            "Valor Total": "R$ {:,.2f}",
+            "Valor Promocional": "R$ {:,.2f}",
+            "R$ Perdido": "R$ {:,.2f}",
+        }))
 
 with col2:
     if st.button("Cadastrar Novo Produto"):
