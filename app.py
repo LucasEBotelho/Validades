@@ -16,7 +16,7 @@ def carregar_estoque():
     except FileNotFoundError:
         return pd.DataFrame(columns=[
             "Codigo Produto", "Nome Produto", "Data Validade", "Unidade", "Quantidade",
-            "Valor", "Observacao", "Valor Sem Promoção", "Promocao", "Perda", "Valor Promocional", "Perda Pós Promoção"
+            "Valor", "Observacao", "Valor Total", "Promocao", "Perda", "Valor Promocional", "R$ Perdido"
         ])
 
 # Função para salvar o estoque
@@ -52,6 +52,7 @@ def cadastrar_produto():
             produtos_df = produtos_df.append(novo_produto, ignore_index=True)
             produtos_df.to_excel("produtos.xlsx", index=False)
             st.success("Produto salvo com sucesso!")
+    
     else:
         # Preencher os dados do estoque
         data_validade = st.date_input("Data de Validade", min_value=datetime.today())
@@ -63,15 +64,14 @@ def cadastrar_produto():
         perda = st.checkbox("Perda?")
         
         valor_promocional = 0.0
-        perda_pos_promocao = 0.0
+        valor_perdido = 0.0
         
         if promocao:
             valor_promocional = st.number_input("Valor Promocional", min_value=0.0, format="%.2f")
-            # Cálculo da Perda Pós Promoção
-            perda_pos_promocao = (valor - valor_promocional) * quantidade
+            valor_perdido = (valor - valor_promocional) * quantidade
         
-        # Calcular o Valor Sem Promoção (simplesmente valor * quantidade)
-        valor_sem_promocao = valor * quantidade
+        # Calcular o valor total
+        valor_total = valor * quantidade - valor_perdido
         
         # Armazenar os dados para salvar
         dados_estoque = {
@@ -82,40 +82,28 @@ def cadastrar_produto():
             "Quantidade": quantidade,
             "Valor": valor,
             "Observacao": observacao,
-            "Valor Sem Promoção": valor_sem_promocao,
+            "Valor Total": valor_total,
             "Promocao": promocao,
             "Perda": perda,
             "Valor Promocional": valor_promocional,
-            "Perda Pós Promoção": perda_pos_promocao
+            "R$ Perdido": valor_perdido
         }
         
         # Botão para salvar os dados no estoque
         if st.button("Salvar Cadastro"):
             salvar_estoque(dados_estoque)
             st.success("Produto cadastrado com sucesso!")
-
+    
 # Tela inicial com botões
 st.title("Controle de Validade dos Produtos")
 
-# Definindo layout para os botões
 col1, col2 = st.columns(2)
 
 with col1:
     if st.button("Consultar Produtos"):
-        # Mostrar produtos cadastrados de forma mais bonita
+        # Mostrar produtos cadastrados
         estoque_df = carregar_estoque()
-        
-        # Ajustando a formatação
-        st.write("### Produtos Cadastrados")
-        st.write("Abaixo estão os produtos e suas informações de validade.")
-
-        # Exibindo o dataframe de forma mais amigável
-        st.dataframe(estoque_df.style.format({
-            "Valor": "R$ {:,.2f}",
-            "Valor Sem Promoção": "R$ {:,.2f}",
-            "Valor Promocional": "R$ {:,.2f}",
-            "Perda Pós Promoção": "R$ {:,.2f}",
-        }))
+        st.dataframe(estoque_df)
 
 with col2:
     if st.button("Cadastrar Novo Produto"):
