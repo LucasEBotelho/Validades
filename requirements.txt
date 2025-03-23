@@ -1,1 +1,3 @@
 openpyxl
+sqlite3
+firebase-admin
