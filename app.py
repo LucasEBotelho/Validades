@@ -1,12 +1,12 @@
 import streamlit as st
-import firebase
-from firebase import credentials, firestore
+import firebase_admin
+from firebase_admin import credentials, firestore
 from datetime import datetime
 
-# Inicializar Firebase
-if not firebase._apps:
+# Inicializar firebase_admin
+if not firebase_admin._apps:
     cred = credentials.Certificate("firebase-admin.json")
-    firebase.initialize_app(cred)
+    firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 
