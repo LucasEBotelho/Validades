@@ -31,7 +31,6 @@ db = conectar_firestore()
 
 # Função para cadastrar um novo produto
 def cadastrar_produto():
-    st.write("Função de cadastro acionada!")  # Mensagem de depuração
     # Carregar os produtos
     produtos_lista = ["Produto 1", "Produto 2", "Produto 3", "Adicionar Novo Produto"]
     
@@ -46,12 +45,16 @@ def cadastrar_produto():
         
         # Salvar o novo produto
         if st.button("Salvar Novo Produto"):
-            st.write(f"Novo produto: {codigo_produto} - {nome_produto}")  # Mostrar os dados
-            # Simulando salvar no Firestore (não vamos realmente salvar aqui, só depurar)
-            st.success("Produto salvo com sucesso!")
-    
+            if codigo_produto and nome_produto:
+                novo_produto = {"Codigo Produto": codigo_produto, "Nome Produto": nome_produto}
+                # Salvar no Firestore
+                db.collection("produtos").add(novo_produto)
+                st.success("Produto salvo com sucesso!")
+            else:
+                st.error("Preencha todos os campos antes de salvar o produto.")
+
     else:
-        st.write("Produto selecionado: " + produto_selecionado)  # Mensagem de depuração
+        st.write(f"Produto selecionado: {produto_selecionado}")  # Mensagem de depuração
 
 # Tela inicial com botões
 st.title("Controle de Validade dos Produtos")
