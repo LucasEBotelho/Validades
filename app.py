@@ -94,15 +94,17 @@ def cadastrar_produto():
             salvar_estoque(dados_estoque)
             st.success("Produto cadastrado com sucesso!")
     
-# Página de seleção
+# Tela inicial com botões
 st.title("Controle de Validade dos Produtos")
 
-opcao = st.radio("O que você deseja fazer?", ("Consultar Produtos", "Cadastrar Novo Produto"))
+col1, col2 = st.columns(2)
 
-if opcao == "Consultar Produtos":
-    # Mostrar produtos cadastrados
-    estoque_df = carregar_estoque()
-    st.dataframe(estoque_df)
+with col1:
+    if st.button("Consultar Produtos"):
+        # Mostrar produtos cadastrados
+        estoque_df = carregar_estoque()
+        st.dataframe(estoque_df)
 
-elif opcao == "Cadastrar Novo Produto":
-    cadastrar_produto()
+with col2:
+    if st.button("Cadastrar Novo Produto"):
+        cadastrar_produto()
