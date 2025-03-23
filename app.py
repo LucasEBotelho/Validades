@@ -22,10 +22,18 @@ def carregar_dados_validades():
 
 # Função para salvar as informações na planilha de dados_validades e realizar commit no GitHub
 def salvar_dados_validades(dados):
+    # Exibindo os dados antes de salvar para depuração
+    st.write("Dados a serem salvos:", dados)
+    
     dados = pd.DataFrame([dados])
     dados_df = carregar_dados_validades()
     dados_df = pd.concat([dados_df, dados], ignore_index=True)
+    
+    # Salvando o arquivo Excel
     dados_df.to_excel("dados_validades.xlsx", index=False)
+    
+    # Exibindo mensagem para garantir que o arquivo foi salvo
+    st.write("Arquivo 'dados_validades.xlsx' salvo com sucesso.")
     
     # Commit no GitHub
     subprocess.run(["git", "add", "dados_validades.xlsx"])  # Adiciona o arquivo alterado
