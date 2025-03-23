@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 from datetime import datetime
+import subprocess
 
 # Função para carregar os dados dos produtos
 def carregar_produtos():
@@ -19,12 +20,17 @@ def carregar_dados_validades():
             "Valor", "Observacao", "Valor Sem Promoção", "Promocao", "Perda", "Valor Promocional", "Perda Pós Promoção"
         ])
 
-# Função para salvar as informações na planilha de dados_validades
+# Função para salvar as informações na planilha de dados_validades e realizar commit no GitHub
 def salvar_dados_validades(dados):
     dados = pd.DataFrame([dados])
     dados_df = carregar_dados_validades()
     dados_df = pd.concat([dados_df, dados], ignore_index=True)
     dados_df.to_excel("dados_validades.xlsx", index=False)
+    
+    # Commit no GitHub
+    subprocess.run(["git", "add", "dados_validades.xlsx"])  # Adiciona o arquivo alterado
+    subprocess.run(["git", "commit", "-m", "Atualização de dados de validade"])  # Commit das mudanças
+    subprocess.run(["git", "push"])  # Envia para o repositório no GitHub
 
 # Função para cadastrar um novo produto
 def cadastrar_produto():
