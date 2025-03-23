@@ -39,7 +39,7 @@ def cadastrar_produto():
     produtos_df = carregar_produtos()
     
     # Opção de escolher um produto
-    produto_selecionado = st.selectbox("Escolha o produto", produtos_df['Nome Produto'])
+    produto_selecionado = st.selectbox("Escolha o produto", produtos_df['Nome Produto'].tolist() + ["Adicionar Novo Produto"])
     
     # Se o produto não estiver na lista, adicionar um novo
     if produto_selecionado == "Adicionar Novo Produto":
@@ -52,7 +52,6 @@ def cadastrar_produto():
             produtos_df = produtos_df.append(novo_produto, ignore_index=True)
             produtos_df.to_excel("produtos.xlsx", index=False)
             st.success("Produto salvo com sucesso!")
-    
     else:
         # Preencher os dados do estoque
         data_validade = st.date_input("Data de Validade", min_value=datetime.today())
@@ -94,17 +93,15 @@ def cadastrar_produto():
             salvar_estoque(dados_estoque)
             st.success("Produto cadastrado com sucesso!")
     
-# Tela inicial com botões
+# Página de seleção
 st.title("Controle de Validade dos Produtos")
 
-col1, col2 = st.columns(2)
+opcao = st.radio("O que você deseja fazer?", ("Consultar Produtos", "Cadastrar Novo Produto"))
 
-with col1:
-    if st.button("Consultar Produtos"):
-        # Mostrar produtos cadastrados
-        estoque_df = carregar_estoque()
-        st.dataframe(estoque_df)
+if opcao == "Consultar Produtos":
+    # Mostrar produtos cadastrados
+    estoque_df = carregar_estoque()
+    st.dataframe(estoque_df)
 
-with col2:
-    if st.button("Cadastrar Novo Produto"):
-        cadastrar_produto()
+elif opcao == "Cadastrar Novo Produto":
+    cadastrar_produto()
