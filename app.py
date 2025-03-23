@@ -16,7 +16,7 @@ def carregar_estoque():
     except FileNotFoundError:
         return pd.DataFrame(columns=[
             "Codigo Produto", "Nome Produto", "Data Validade", "Unidade", "Quantidade",
-            "Valor", "Observacao", "Valor Total", "Promocao", "Perda", "Valor Promocional", "R$ Perdido"
+            "Valor", "Observacao", "Valor Sem Promoção", "Promocao", "Perda", "Valor Promocional", "R$ Perdido"
         ])
 
 # Função para salvar o estoque
@@ -67,10 +67,11 @@ def cadastrar_produto():
         
         if promocao:
             valor_promocional = st.number_input("Valor Promocional", min_value=0.0, format="%.2f")
+            # Perda após a promoção
             valor_perdido = (valor - valor_promocional) * quantidade
         
-        # Calcular o valor total
-        valor_total = valor * quantidade - valor_perdido
+        # Calcular o Valor Sem Promoção
+        valor_sem_promocao = valor * quantidade
         
         # Armazenar os dados para salvar
         dados_estoque = {
@@ -81,7 +82,7 @@ def cadastrar_produto():
             "Quantidade": quantidade,
             "Valor": valor,
             "Observacao": observacao,
-            "Valor Total": valor_total,
+            "Valor Sem Promoção": valor_sem_promocao,
             "Promocao": promocao,
             "Perda": perda,
             "Valor Promocional": valor_promocional,
