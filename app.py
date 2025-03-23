@@ -52,7 +52,8 @@ def cadastrar_produto():
             produtos_df = produtos_df.append(novo_produto, ignore_index=True)
             produtos_df.to_excel("produtos.xlsx", index=False)
             st.success("Produto salvo com sucesso!")
-    
+            # Atualizar o estado para refletir que o produto foi salvo
+            st.session_state.produto_selecionado = nome_produto
     else:
         # Preencher os dados do estoque
         data_validade = st.date_input("Data de Validade", min_value=datetime.today())
@@ -94,9 +95,15 @@ def cadastrar_produto():
         if st.button("Salvar Cadastro"):
             salvar_estoque(dados_estoque)
             st.success("Produto cadastrado com sucesso!")
+            # Armazenar dados no session_state para persistir após re-render
+            st.session_state.produto_selecionado = produto_selecionado
 
 # Tela inicial com botões
 st.title("Controle de Validade dos Produtos")
+
+# Definir uma variável de sessão para controlar o estado da tela
+if 'produto_selecionado' not in st.session_state:
+    st.session_state.produto_selecionado = None
 
 col1, col2 = st.columns(2)
 
