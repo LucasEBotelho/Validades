@@ -62,9 +62,13 @@ def carregar_estoque():
 # Função para salvar o estoque no Firebase
 def salvar_estoque(dados):
     if db:
-        estoque_ref = db.collection("estoque")
-        estoque_ref.add(dados)
-        st.success("Produto salvo com sucesso!")
+        try:
+            estoque_ref = db.collection("estoque")
+            estoque_ref.add(dados)
+            st.success("Produto salvo com sucesso!")
+            st.write("Dados enviados para o Firestore:", dados)  # Exibe os dados no site para verificar
+        except Exception as e:
+            st.error(f"Erro ao salvar produto no Firestore: {e}")  # Exibe erro no site
     else:
         st.error("Não foi possível salvar o produto, pois não há conexão com o Firestore.")
 
@@ -126,6 +130,7 @@ def cadastrar_produto():
         
         # Botão para salvar os dados no estoque
         if st.button("Salvar Cadastro"):
+            st.write("Tentando salvar os dados:", dados_estoque)  # Exibe os dados antes de salvar
             salvar_estoque(dados_estoque)
 
 # Tela inicial com botões
