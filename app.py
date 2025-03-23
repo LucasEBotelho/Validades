@@ -39,7 +39,7 @@ def carregar_estoque():
 # Função para salvar o estoque no Firebase
 def salvar_estoque(dados):
     estoque_ref = db.collection("estoque")
-    estoque_ref.add(dados)
+    estoque_ref.add(dados)  # Adiciona um novo documento à coleção estoque
 
 # Função para cadastrar um novo produto
 def cadastrar_produto():
@@ -58,7 +58,7 @@ def cadastrar_produto():
         if st.button("Salvar Novo Produto"):
             novo_produto = {"Codigo Produto": codigo_produto, "Nome Produto": nome_produto}
             # Salvar no Firestore
-            db.collection("produtos").add(novo_produto)
+            db.collection("produtos").add(novo_produto)  # Cria a coleção "produtos" e salva o produto
             st.success("Produto salvo com sucesso!")
     
     else:
@@ -99,7 +99,7 @@ def cadastrar_produto():
         
         # Botão para salvar os dados no estoque
         if st.button("Salvar Cadastro"):
-            salvar_estoque(dados_estoque)
+            salvar_estoque(dados_estoque)  # Salva no Firestore
             st.success("Produto cadastrado com sucesso!")
 
 # Tela inicial com botões
@@ -115,4 +115,4 @@ with col1:
 
 with col2:
     if st.button("Cadastrar Novo Produto"):
-        cadastrar_produto()
+        cadastrar_produto()  # Função para cadastrar um novo produto
