@@ -37,13 +37,15 @@ def cadastrar_produto():
     # Opção de escolher um produto
     produto_selecionado = st.selectbox("Escolha o produto", produtos_lista)
     
-    # Se o produto não estiver na lista, adicionar um novo
+    # Verificando se a opção de adicionar um novo produto foi selecionada
     if produto_selecionado == "Adicionar Novo Produto":
         st.write("Entrando na parte de adicionar novo produto...")  # Mensagem de depuração
+        
+        # Entradas para o novo produto
         codigo_produto = st.text_input("Código do Produto")
         nome_produto = st.text_input("Nome do Produto")
         
-        # Salvar o novo produto
+        # Exibindo botão para salvar
         if st.button("Salvar Novo Produto"):
             if codigo_produto and nome_produto:
                 novo_produto = {"Codigo Produto": codigo_produto, "Nome Produto": nome_produto}
