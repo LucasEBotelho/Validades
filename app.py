@@ -28,7 +28,7 @@ def salvar_estoque(dados):
     # Carregar a planilha de estoque
     estoque_df = carregar_estoque()
     # Adicionar os novos dados
-    estoque_df = estoque_df.append(dados, ignore_index=True)
+    estoque_df = pd.concat([estoque_df, dados], ignore_index=True)
     # Salvar a planilha
     estoque_df.to_excel("estoque.xlsx", index=False)
 
